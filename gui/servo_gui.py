@@ -33,6 +33,9 @@ class ServoGUI:
         self.servo_d_button = tk.Button(self.root, text="Servo E", command=lambda: self.select_servo('E'))
         self.close_button = tk.Button(self.root, text="Close Arduino", command=self.close_arduino)
         self.quit_button = tk.Button(self.root, text="Quit", command=self.quit_program)
+        self.goto_xy_button = tk.Button(self.root, text="Go to (x, y)", command=self.goto_xy)
+        self.x_entry = tk.Entry(self.root, width=5)
+        self.y_entry = tk.Entry(self.root, width=5)
 
         self.servo_a_label = tk.Label(self.root)
         self.servo_b_label = tk.Label(self.root)
@@ -55,6 +58,9 @@ class ServoGUI:
         self.servo_b_label.grid(row=1, column=1, padx=5)
         self.servo_c_label.grid(row=2, column=1, padx=5)
         self.servo_d_label.grid(row=3, column=1, padx=5)
+        self.goto_xy_button.grid(row=8, column=0, pady=5)
+        self.x_entry.grid(row=8, column=1, pady=5)
+        self.y_entry.grid(row=8, column=2, pady=5)
 
         self.mButton1.grid(row=4, column=0, pady=20, padx=5)
         self.mButton2.grid(row=4, column=1, pady=20, padx=5)
@@ -70,6 +76,14 @@ class ServoGUI:
         self.servo = s
         self.update_display()
 
+    def goto_xy(self):
+        try:
+            x = float(self.x_entry.get())
+            y = float(self.y_entry.get())
+            self.arm.set_position(x, y)
+        except ValueError:
+            print("Invalid x or y input")
+            
     # Function to increase counter
     def increase_by_ten(self):
         if self.counters[self.servo] + 10 <= 180:
