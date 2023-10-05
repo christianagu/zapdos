@@ -1,0 +1,12 @@
+# Environment variables
+.env
+
+# Python cache files and directories
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info
+
+# Specific folders or files
+.configPics
+.armListener
