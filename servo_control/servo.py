@@ -1,6 +1,7 @@
 import time
 from arduino_interface.arduino_controller import ArduinoController
 
+
 class ServoArm:
     
     def __init__(self, arduino_port='COM5'):
