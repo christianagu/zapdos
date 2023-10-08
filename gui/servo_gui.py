@@ -1,4 +1,5 @@
 import tkinter as tk
+import time
 from servo_control.servo import ServoArm
 
 
@@ -67,7 +68,9 @@ class ServoGUI:
         self.servo_value_entry.grid(row=5, columnspan=2, pady=20)
         self.close_button.grid(row=6, columnspan=2, pady=20)
         self.quit_button.grid(row=7, columnspan=2, pady=20)  # Moved to row=7
-
+        
+        self.scan_button = tk.Button(self.root, text="Scan for objects", command=self.scan_for_objects)
+        self.scan_button.grid(row=9, columnspan=2, pady=5)
         
 
 
@@ -83,7 +86,7 @@ class ServoGUI:
             self.arm.set_position(x, y)
         except ValueError:
             print("Invalid x or y input")
-            
+
     # Function to increase counter
     def increase_by_ten(self):
         if self.counters[self.servo] + 10 <= 180:
@@ -150,6 +153,19 @@ class ServoGUI:
         except ValueError:  # If input is not valid, reset to the current value of the servo
             self.counters[self.servo] = self.counters.get(self.servo, 0)  # Fetch current value or default to 0
         self.update_display()
+
+   # (ServoGUI class continued...)
+
+    def scan_for_objects(self):
+        for pos in range(0, 181, 45):  # Scans from 0 to 180 degrees in steps of 45
+            self.arm.move_servo('J', pos)  # rotate the base
+            time.sleep(1)  # give some time to stabilize
+            distance = self.arm.read_distance()
+            if distance and distance < 50:  # Set a threshold for detection
+                print(f"Object detected at {pos} degrees and distance {distance} cm")
+                # Now use the set_position method to orient the arm to this position
+                self.arm.set_position(distance, 0)  # 0 for y as we're assuming 2D plane
+                break
 
 
 
